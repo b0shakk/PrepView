@@ -2,9 +2,14 @@ import React from "react";
 import "./RecButton.css";
 import { CohereClient } from "cohere-ai";
 import TranscribedTemplate from "../../views/globals";
+import { questionFeedback } from "components/ScoreCard/ScoreCard";
 const axios = require("axios");
 
 const backend_path = "http://127.0.0.1:5000/transcribe";
+
+export const cohere = new CohereClient({
+  token: "jcDwCna5a0Lcq21ccTNNFe86J2LdYUx0AQQqJlBs",
+});
 
 export var Transcribed = new TranscribedTemplate(
   undefined,
@@ -88,9 +93,7 @@ class RecButton extends React.Component {
 
   async getNextQ(prompt) {
     console.log("Fetching question...");
-    const cohere = new CohereClient({
-      token: "jcDwCna5a0Lcq21ccTNNFe86J2LdYUx0AQQqJlBs",
-    });
+
     const response = await cohere.generate({
       model: "command",
       prompt,
@@ -100,13 +103,14 @@ class RecButton extends React.Component {
       //   end_sequences: ["Malcolm: "],
       return_likelihoods: "NONE",
     });
-    console.log(response);
-    console.log("Fetched question");
     return response;
   }
 
   addToReport(text, type) {
-    let temp = type == 1 ? "Answer: " : "Question: ";
+    let temp = "";
+    if (type == 1) temp = "Answer: ";
+    else if (type == 0) temp = "Question: ";
+    else if (type == 2) temp = "Feedback: ";
     for (let i = 0, counter = 1; i < text.length; i++, counter++) {
       if ((counter % 75 >= 65 && text[i] == " ") || text[i] == "\n") {
         temp = temp + "\n";
@@ -121,7 +125,7 @@ class RecButton extends React.Component {
       question: "Fetching your question...",
       button_text: Transcribed.text,
     });
-    this.addToReport(Transcribed.text, 1);
+
     prompt = prompt + Transcribed.text;
     if (TOPIC == "") {
       TOPIC = Transcribed.text;
@@ -130,7 +134,7 @@ class RecButton extends React.Component {
     prompt = prompt + "Eric:";
     let question_p = this.getNextQ(prompt).then((resp) => {
       let question = resp.generations[0].text;
-      console.log("Original Question: ", question);
+      // console.log("Original Question: ", question);
       const paragraphs = question.split("Malcolm:");
       if (paragraphs.length > 0) {
         question = paragraphs[0];
@@ -144,7 +148,13 @@ class RecButton extends React.Component {
       console.log("Fetched question: ", question);
       prompt = prompt + "Malcolm:";
 
-      this.addToReport(question, 0);
+      if (questionFeedback.length > 0) {
+        this.addToReport(questionFeedback, 2);
+        this.addToReport(question, 0);
+        this.addToReport(Transcribed.text, 1);
+      } else {
+        this.addToReport(Transcribed.text, 1);
+      }
 
       CURR_Q = question;
       this.setState({
@@ -174,26 +184,24 @@ class RecButton extends React.Component {
         })
         .then(async (pending_response) => {
           var id = pending_response.id;
-          var flag = true;
+          let flag = true;
           while (flag) {
             var status = this.assembly
               .get(`/transcript/${id}`)
               .then((res) => res.data);
             const status_resp = await status;
             flag = status_resp.status !== "completed";
-
+            if (!flag) {
+              Transcribed.text = status_resp.text;
+              Transcribed.words = status_resp.words;
+              Transcribed.duration = status_resp.audio_duration;
+            }
             if (status_resp.status === "error") {
               break;
             }
           }
-          var transcript_p = this.assembly
-            .get(`/transcript/${id}`)
-            .then((res) => res.data);
-          const transcript = await transcript_p;
-          Transcribed.text = transcript.text;
-          Transcribed.words = transcript.words;
-          Transcribed.duration = transcript.audio_duration;
           this.audioChunks = [];
+          console.log("Starting to fetch questions...");
           this.nextQuestion();
           this.setState({
             button_name: "Record",
@@ -213,6 +221,9 @@ class RecButton extends React.Component {
       this.setState({
         status: "not started",
         button_name: "Wait",
+        button_text: "Hold Up!",
+        question:
+          "Good going! Please wait while our NLP model converts your speech to text",
       });
       this.rec.stop();
     } else if (this.state.status === "done") {

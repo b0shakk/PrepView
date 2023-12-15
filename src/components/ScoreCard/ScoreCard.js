@@ -6,26 +6,25 @@ import { TOPIC, CURR_Q } from "../RecButton/RecButton";
 var rendered_q = "";
 var scores = [(0, "None"), (0, "None"), (0, "None"), (0, "None")];
 
+export var questionFeedback = "";
+
 class ScoreCard extends React.Component {
   componentDidMount() {
-    this.interval = setInterval(
-      () => this.setState({ time: Date.now() }),
-      5000
-    );
+    this.interval = setInterval(() => this.setState({ time: Date.now() }));
   }
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
   addFeedback(feedback) {
-    let temp = "Feedback: ";
+    let temp = "";
     for (let i = 0, counter = 1; i < feedback.length; i++, counter++) {
       if ((counter % 75 >= 65 && feedback[i] == " ") || feedback[i] == "\n") {
         temp = temp + "\n";
         counter = 0;
       } else temp = temp + feedback[i];
     }
-    report = report + temp + "\n\n";
+    questionFeedback = temp + "\n\n";
   }
 
   render() {
@@ -35,12 +34,13 @@ class ScoreCard extends React.Component {
     } else {
       var feedback = "";
       if (scores[0] === "None") {
-        feedback = "Please wait for your feedback";
+        feedback =
+          "Please press record and wait for 5 seconds for your feedback";
       } else {
-        feedback = feedback + scores[0] + " ";
         feedback = feedback + scores[1] + " ";
         feedback = feedback + scores[2] + " ";
         feedback = feedback + scores[3] + " ";
+        feedback = feedback + scores[0] + " ";
         // this.addFeedback(feedback);
       }
       return (
@@ -56,10 +56,10 @@ class ScoreCard extends React.Component {
       if (scores[0] === "None") {
         feedback = "Please wait for your feedback";
       } else {
-        feedback = feedback + scores[0] + " ";
         feedback = feedback + scores[1] + " ";
         feedback = feedback + scores[2] + " ";
         feedback = feedback + scores[3] + " ";
+        feedback = feedback + scores[0] + " ";
         this.addFeedback(feedback);
       }
       return (

@@ -1,32 +1,30 @@
 import { Transcribed } from "./components/RecButton/RecButton";
-import { CohereClient } from "cohere-ai";
+// import { CohereClient } from "cohere-ai";
+import { cohere } from "./components/RecButton/RecButton";
 
 export async function scoreText(topic, question) {
-  // console.log(Transcribed)
+  console.log("Starting to fetch scores...");
   var answer = Transcribed.text;
   var duration = Transcribed.duration;
   var words = Transcribed.words;
 
   var scores = [];
-  // console.log("SCORING:", answer, duration)
+
+  await scoreFeedback(topic, question, answer).then((resp) => {
+    let x = resp.generations[0].text.replace("Question:", "");
+    scores.push((1.0, x));
+  });
   scores.push(scoreSpeed(answer, duration));
   scores.push(scorePauses(words, duration));
   scores.push(scoreFiller(words));
-
-  return await scoreFeedback(topic, question, answer).then((resp) => {
-    let x = resp.generations[0].text.replace("Question:", "");
-    // console.log("Model Feedback:", x)
-    scores.push((1.0, x));
-    console.log("Score:", scores);
-    return scores;
-  });
+  console.log("Score:", scores);
+  return scores;
 }
 
 function scoreSpeed(answer, transcript_duration) {
   let n_words = answer.split(" ").length;
   let minutes = transcript_duration / 60.0;
   let wpm = Math.round(n_words / minutes);
-  //console.log("WPM:", wpm)
   if (wpm < 105) {
     return (
       0.0 + Math.random() / 10,
@@ -53,17 +51,6 @@ function scoreSpeed(answer, transcript_duration) {
 }
 
 async function scoreFeedback(topic, question, answer) {
-  const cohere = new CohereClient({
-    token: "2EjahD1NPiOseU6rRkP2sfjlwRQXB0V6jOfCbbND",
-  });
-
-  // const { Configuration, OpenAIApi } = require("openai");
-
-  // const configuration = new Configuration({
-  //     apiKey: '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',
-  // });
-  // const openai = new OpenAIApi(configuration);
-  //console.log(question, answer)
   let prompt = `Eric is reviewing his recent interview with this candidate for a ${topic} position and he is providing useful feedback to the candidate.
         A good response to a question should fully answer all parts of the question, it should be specific and on-topic, it should highlight potential experiences, and it should show how the candidate is a good fit for the position.
         A bad response might have bad grammer, not respond to the question, make the candidate seem like a poor fit, or not highlight the candidate's experience. 
@@ -116,7 +103,6 @@ function scorePauses(words, transcript_duration) {
   }
 
   let perc_talking = 1 - pause_time / transcript_duration;
-  //log("Pause Score:", perc_talking)
   if (perc_talking < 0.6) {
     return (
       0.0 + Math.random() / 5,
@@ -157,7 +143,6 @@ function scoreFiller(words) {
     }
   }
   let perc_filler = 1 - filler_cnt / words.length;
-  //console.log("Percent Non-Filler Words:", perc_filler)
   if (perc_filler < 0.75) {
     return (
       0.0 + Math.random() / 5,
