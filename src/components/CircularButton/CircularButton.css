@@ -1,7 +1,7 @@
 .circular-button {
   align-items: flex-start;
-  background-color: rgb(0, 0, 0);
-  border-radius: 100%;
+  background-color: #2d2d30;
+  border-radius: 15%;
   box-shadow: 0px 4px 14px #0000001a;
   display: flex;
   height: 60px;
@@ -11,16 +11,11 @@
   padding: 18px 118px;
   cursor: pointer;
   letter-spacing: 0;
-  text-align: left;
-  font-size: 16px;
   border: none;
-  color: white;
   padding: 20px;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
   margin: 4px 2px;
-  letter-spacing: 0;
 
   text-align: center;
   color: #9e7ae3;
@@ -31,23 +26,26 @@
 }
 .circular-button-1 {
   position: relative;
-  top: 4rem;
+  top: -2.2rem;
   left: 11rem;
-  margin-left: 100px;
-  margin-right: 100px;
+  min-width: 100px;
+  /* margin-left: 100px; */
+  /* margin-right: 100px; */
   color: #9e7ae3;
 }
 .circular-button-2 {
   position: relative;
-  top: 8rem;
+  top: 2rem;
   left: 47vh;
+  min-width: 100px;
   margin-left: 500px;
   color: #e3947a;
 }
 .circular-button-3 {
   position: relative;
   right: 11rem;
+  min-width: 100px;
   /* top: 8rem; */
-  top: -0.5rem;
+  top: -6.5rem;
   color: #e37a7a;
 }

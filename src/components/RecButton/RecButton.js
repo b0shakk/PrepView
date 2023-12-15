@@ -125,7 +125,7 @@ class RecButton extends React.Component {
       question: "Fetching your question...",
       button_text: Transcribed.text,
     });
-
+    console.log("Text: " + Transcribed.text);
     prompt = prompt + Transcribed.text;
     if (TOPIC == "") {
       TOPIC = Transcribed.text;
@@ -238,7 +238,7 @@ class RecButton extends React.Component {
       <>
         <div>
           <div>
-            <h1 className="headline">Question: </h1>
+            <h2 className="headline">Question: </h2>
           </div>
           <div>
             <h1 className="title">{this.state.question}</h1>

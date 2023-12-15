@@ -45,7 +45,7 @@ class ScoreCard extends React.Component {
       }
       return (
         <div>
-          <h4 className="feedbacktext feedback">{feedback}</h4>
+          <h4 className="feedback">{feedback}</h4>
         </div>
       );
     }

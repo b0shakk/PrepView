@@ -70,10 +70,10 @@ function QuestionScreen(props) {
       >
         End
       </CircularButton>
-      <div>
-        <br></br>
-        <p className="feedbackTitle">Feedback</p>
-      </div>
+      {/* <div> */}
+      {/* <br></br> */}
+      <p className="feedbackTitle">Feedback:</p>
+      {/* </div> */}
       {<ScoreCard />}
     </div>
   );

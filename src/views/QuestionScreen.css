@@ -1,52 +1,53 @@
 .question-screen {
   align-items: center;
-  /* background: linear-gradient(162.94deg, #06d672 0%, #6e3ac1 98.61%); */
-  background-color: #46454567;
+  background-color: #1e1e1e;
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
-  position: relative;
-  /* min-width: 100vw;
-    min-height: 100vh; */
+  padding: 5%;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: none;
   box-sizing: border-box;
-  line-height: normal;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  pointer-events: none;
-  width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  pointer-events: auto;
+  /* background: linear-gradient(162.94deg, #06d672 0%, #6e3ac1 98.61%); */
+  /* background-image: linear-gradient(90deg, #00000080, #0000); */
+  /* padding: 16px 0; */
+  /* position: relative; */
+  /* min-width: 100vw;*/
+  /* margin-top: 30%; */
+  /* line-height: normal; */
+  /* justify-content: center; */
+  /* pointer-events: none; */
+  /* width: 100%; */
+  /* box-sizing: border-box; */
+  /* flex-shrink: 0; */
+  /* pointer-events: auto; */
 }
 * {
   box-sizing: border-box;
 }
 
 .answer2 {
-  width: 900px;
+  /* width: 900px; */
   border: 2px dotted black;
-  text-align: center;
+  /* text-align: center; */
   background-color: white;
 }
 
 .feedbackTitle {
-  letter-spacing: 0;
-  margin-top: 3px;
-  text-align: center;
-  width: 125px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: #ffffff;
-  background-color: #224b64;
+  /* letter-spacing: 0; */
+  /* margin-top: 30%; */
+  /* text-align: center; */
+  /* width: 125px; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  color: #77b96a;
+  /* background-color: #2d2d30; */
   font-family: "Inter", Helvetica;
-  font-size: 18px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  border-radius: 50%;
-  box-shadow: 0px 4px 14px #0000001a;
-  padding: 10px;
+  /* border-radius: 15%; */
+  /* box-shadow: 0px 4px 14px #0000001a; */
+  /* padding: 10px; */
 }
